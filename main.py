@@ -25,7 +25,7 @@ def send_notification(user_email: str):
     html_content = f"""
     <html><body style="font-family:sans-serif;padding:20px;color:#1a2744;">
       <h2 style="color:#1a73e8;">🚀 New Waitlist Signup!</h2>
-      <p>A new user just joined the <strong>Gmail for Alexa</strong> waitlist:</p>
+      <p>A new user just joined the <strong>Email for Alexa</strong> waitlist:</p>
       <div style="background:#f1f3f4;padding:15px;border-radius:8px;font-size:18px;border:1px solid #dee2e6;">
         <strong>Email:</strong> {user_email}
       </div>
@@ -46,6 +46,58 @@ def send_notification(user_email: str):
 @app.get("/", response_class=HTMLResponse)
 async def index(request: Request):
     return templates.TemplateResponse("index.html", {"request": request})
+
+# --- NEW PRIVACY POLICY ROUTE ---
+@app.get("/privacy", response_class=HTMLResponse)
+async def privacy_policy():
+    html_content = """
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Privacy Policy - Student OS</title>
+        <<style>
+            body { 
+                font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; 
+                line-height: 1.6; 
+                max-width: 800px; 
+                margin: 40px auto; 
+                padding: 0 20px; 
+                color: #243156; /* <--- Changed this right here! */
+            }
+            h1, h2 { color: #243156; }
+            .limited-use { background-color: #f8f9fa; padding: 15px; border-left: 4px solid #1a73e8; margin: 20px 0; border-radius: 4px; }
+        </style>
+    </head>
+    <body>
+        <h1>Privacy Policy for EmailForAlexa</h1>
+        <p><strong>Last Updated:</strong> March 2026</p>
+
+        <h2>1. Information We Collect</h2>
+        <p>Student OS accesses your Gmail account (read, compose, send) and basic profile information solely for the purpose of Account Linking and providing the core voice assistant features.</p>
+
+        <h2>2. How We Use Information</h2>
+        <p>Your data is used exclusively to facilitate voice-activated email summaries and drafting via Alexa. We do not use your data for advertising or sell it to third parties.</p>
+
+        <div class="limited-use">
+            <strong>Google API Limited Use Disclosure:</strong>
+            <p>Student OS's use and transfer to any other app of information received from Google APIs will adhere to the <a href="https://developers.google.com/terms/api-services-user-data-policy" target="_blank">Google API Services User Data Policy</a>, including the Limited Use requirements.</p>
+        </div>
+
+        <h2>3. Data Sharing & AI Processing</h2>
+        <p>To generate email summaries and draft responses, email content is temporarily transmitted to a third-party AI provider (OpenRouter/Large Language Models). This data is processed in memory to generate the requested text and is not permanently stored or used to train public AI models.</p>
+
+        <h2>4. Data Storage & Security</h2>
+        <p>Student OS does not permanently store your emails, passwords, or personal correspondence on our servers. We only retain secure, temporary OAuth tokens required to maintain the connection between your Alexa account and your Google account.</p>
+
+        <h2>5. Contact Us</h2>
+        <p>If you have any questions about this policy, please contact the developer at isong@westmont.edu.</p>
+    </body>
+    </html>
+    """
+    return HTMLResponse(content=html_content, status_code=200)
+# --------------------------------
 
 @app.post("/signup")
 async def signup(email: str = Form(...)):
