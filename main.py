@@ -47,7 +47,7 @@ def send_notification(user_email: str):
 async def index(request: Request):
     return templates.TemplateResponse("index.html", {"request": request})
 
-# --- NEW PRIVACY POLICY ROUTE ---
+# --- PRIVACY POLICY ROUTE ---
 @app.get("/privacy", response_class=HTMLResponse)
 async def privacy_policy():
     html_content = """
@@ -56,15 +56,15 @@ async def privacy_policy():
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Privacy Policy - Student OS</title>
-        <<style>
+        <title>Privacy Policy - EmailForAlexa</title>
+        <style>
             body { 
                 font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; 
                 line-height: 1.6; 
                 max-width: 800px; 
                 margin: 40px auto; 
                 padding: 0 20px; 
-                color: #243156; /* <--- Changed this right here! */
+                color: #243156; 
             }
             h1, h2 { color: #243156; }
             .limited-use { background-color: #f8f9fa; padding: 15px; border-left: 4px solid #1a73e8; margin: 20px 0; border-radius: 4px; }
@@ -93,6 +93,54 @@ async def privacy_policy():
 
         <h2>5. Contact Us</h2>
         <p>If you have any questions about this policy, please contact the developer at isong@westmont.edu.</p>
+    </body>
+    </html>
+    """
+    return HTMLResponse(content=html_content, status_code=200)
+
+# --- NEW TERMS OF SERVICE ROUTE ---
+@app.get("/terms", response_class=HTMLResponse)
+async def terms_of_service():
+    html_content = """
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Terms of Service - EmailForAlexa</title>
+        <style>
+            body { 
+                font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; 
+                line-height: 1.6; 
+                max-width: 800px; 
+                margin: 40px auto; 
+                padding: 0 20px; 
+                color: #243156; 
+            }
+            h1, h2 { color: #243156; }
+        </style>
+    </head>
+    <body>
+        <h1>Terms of Service for EmailForAlexa</h1>
+        <p><strong>Last Updated:</strong> March 2026</p>
+
+        <h2>1. Acceptance of Terms</h2>
+        <p>By accessing and using EmailForAlexa (the "Service"), you accept and agree to be bound by the terms and provision of this agreement. If you do not agree to abide by these terms, please do not use this Service.</p>
+
+        <h2>2. Description of Service</h2>
+        <p>EmailForAlexa is an experimental, voice-activated application that connects Amazon Alexa to your Gmail account. It utilizes third-party Large Language Models (LLMs) to summarize and draft emails on your behalf.</p>
+
+        <h2>3. User Responsibilities</h2>
+        <p>You are responsible for maintaining the confidentiality of your connected accounts. Because this Service uses Generative AI, you agree to independently verify any drafted emails before allowing the Service to send them. The developer is not responsible for the content of emails generated or sent via the Service.</p>
+
+        <h2>4. Disclaimer of Warranties (As-Is)</h2>
+        <p>The Service is provided on an "AS IS" and "AS AVAILABLE" basis. As an academic/beta project, the Service makes no guarantees regarding uptime, reliability, or accuracy of the AI-generated responses.</p>
+
+        <h2>5. Limitation of Liability</h2>
+        <p>In no event shall the developer be liable for any indirect, incidental, special, or consequential damages arising out of or in connection with your use of the Service, including but not limited to lost emails, unintended communications, or data loss.</p>
+
+        <h2>6. Contact</h2>
+        <p>If you have any questions regarding these Terms, please contact isong@westmont.edu.</p>
     </body>
     </html>
     """
