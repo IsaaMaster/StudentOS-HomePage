@@ -71,7 +71,7 @@ async def privacy_policy():
         </style>
     </head>
     <body>
-        <h1>Privacy Policy for EmailForAlexa</h1>
+        <h1>Privacy Policy for Email For Alexa</h1>
         <p><strong>Last Updated:</strong> March 2026</p>
 
         <h2>1. Information We Collect</h2>
@@ -121,7 +121,7 @@ async def terms_of_service():
         </style>
     </head>
     <body>
-        <h1>Terms of Service for EmailForAlexa</h1>
+        <h1>Terms of Service for Email For Alexa</h1>
         <p><strong>Last Updated:</strong> March 2026</p>
 
         <h2>1. Acceptance of Terms</h2>
