@@ -25,7 +25,7 @@ def send_notification(user_email: str):
     html_content = f"""
     <html><body style="font-family:sans-serif;padding:20px;color:#1a2744;">
       <h2 style="color:#1a73e8;">🚀 New Waitlist Signup!</h2>
-      <p>A new user just joined the <strong>Email for Alexa</strong> waitlist:</p>
+      <p>A new user just joined the <strong>MailBrief</strong> waitlist:</p>
       <div style="background:#f1f3f4;padding:15px;border-radius:8px;font-size:18px;border:1px solid #dee2e6;">
         <strong>Email:</strong> {user_email}
       </div>
@@ -71,7 +71,7 @@ async def privacy_policy():
         </style>
     </head>
     <body>
-        <h1>Privacy Policy for Email For Alexa</h1>
+        <h1>MailBrief Privacy Policy</h1>
         <p><strong>Last Updated:</strong> March 2026</p>
 
         <h2>1. Information We Collect</h2>
@@ -121,7 +121,7 @@ async def terms_of_service():
         </style>
     </head>
     <body>
-        <h1>Terms of Service for Email For Alexa</h1>
+        <h1>MailBrief Terms of Service</h1>
         <p><strong>Last Updated:</strong> March 2026</p>
 
         <h2>1. Acceptance of Terms</h2>
