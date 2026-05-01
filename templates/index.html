@@ -161,7 +161,10 @@
         </div>
         <span class="font-bold text-[#1a2744] text-base tracking-tight">MailBrief</span>
       </div>
-      <span class="pill">Early Access</span>
+      <div class="flex items-center gap-5">
+        <a href="#playground" class="text-sm font-semibold text-slate-500 hover:text-[#1a2744] transition-colors hidden sm:block">Playground</a>
+        <button id="nav-early-access-btn" class="cta-btn text-sm font-semibold px-4 py-2 rounded-xl">Early Access</button>
+      </div>
     </div>
   </nav>
 
@@ -181,29 +184,14 @@
       using just your voice — no screen required.
     </p>
 
-    <div class="fade-in delay-3 max-w-md mx-auto">
-      <form id="signup-form" class="flex flex-col sm:flex-row gap-3 items-stretch" novalidate>
-        <input
-          id="email-input"
-          type="email"
-          name="email"
-          placeholder="alexa-account@email.com" 
-          required
-          class="email-input flex-1 border-2 border-slate-200 rounded-xl px-4 py-3.5 text-base text-slate-800 placeholder-slate-400 transition"
-        />
-        <button type="submit" class="cta-btn font-semibold text-base px-6 py-3.5 rounded-xl whitespace-nowrap">
-          Join Waitlist
-        </button>
-      </form>
-      <p id="error-msg" class="text-red-500 text-sm mt-3 hidden">Please enter a valid email address.</p>
-      <div id="success-msg" class="mt-4 bg-amber-50 text-amber-800 font-semibold rounded-xl px-5 py-3 border border-amber-200" style="display:none">
-        ✓ You're on the list! We'll be in touch soon.
-      </div>
+    <div class="fade-in delay-3 flex flex-col sm:flex-row gap-3 justify-center items-center">
+      <a href="#playground" class="cta-btn font-semibold text-base px-8 py-3.5 rounded-xl inline-block">
+        Try it now →
+      </a>
+      <button id="hero-early-access-btn" class="font-semibold text-base px-8 py-3.5 rounded-xl border-2 border-[#1a2744] text-[#1a2744] hover:bg-[#f0f2f8] transition-colors bg-white">
+        Get Early Access
+      </button>
     </div>
-
-    <p class="fade-in delay-3 text-sm text-slate-500 mt-4 font-medium">
-      ⚠️ <span class="text-slate-400">Please enter the email address connected to your</span> Amazon Alexa app.
-    </p>
   </section>
 
   <!-- ─── MIC VISUAL ────────────────────────────────────── -->
@@ -290,7 +278,7 @@
   </section>
 
   <!-- ─── DEMO ────────────────────────────────────────── -->
-  <section id="demo-section" class="max-w-5xl mx-auto px-6 py-20">
+  <section id="playground" class="max-w-5xl mx-auto px-6 py-20">
     <h2 class="text-3xl font-extrabold text-center mb-3 text-[#1a2744]">See it in action.</h2>
     <p class="text-center text-slate-500 mb-10 text-lg">Type a command like you'd say to Alexa. Watch your inbox update in real time.</p>
 
@@ -409,6 +397,36 @@
     </div>
   </section>
 
+  <!-- ─── EARLY ACCESS MODAL ─────────────────────────── -->
+  <div id="early-access-modal" class="fixed inset-0 z-50 items-center justify-center hidden">
+    <div id="modal-backdrop" class="absolute inset-0 bg-[#1a2744]/60 backdrop-blur-sm"></div>
+    <div class="relative bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full mx-6 animate-[fadeIn_.2s_ease_both]">
+      <button id="modal-close-btn" class="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full text-slate-400 hover:text-[#1a2744] hover:bg-slate-100 transition text-xl leading-none">&times;</button>
+      <div class="flex items-center gap-2 mb-5">
+        <div class="w-8 h-8 rounded-lg bg-[#1a2744] flex items-center justify-center flex-shrink-0">
+          <svg class="w-4 h-4 text-[#f59e0b]" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M12 14a3 3 0 0 0 3-3V5a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3zm5-3a5 5 0 0 1-10 0H5a7 7 0 0 0 6 6.93V20H9v2h6v-2h-2v-2.07A7 7 0 0 0 19 11h-2z"/>
+          </svg>
+        </div>
+        <span class="font-bold text-[#1a2744] text-base tracking-tight">MailBrief</span>
+      </div>
+      <h2 class="text-2xl font-extrabold text-[#1a2744] mb-2">Get Early Access</h2>
+      <p class="text-slate-500 mb-6 text-sm leading-relaxed">We're opening access in waves. Join the waitlist and be first in line when we launch.</p>
+      <form id="modal-signup-form" class="flex flex-col gap-3" novalidate>
+        <input id="modal-email-input" type="email" name="email" placeholder="alexa-account@email.com" required
+          class="email-input border-2 border-slate-200 rounded-xl px-4 py-3.5 text-base text-slate-800 placeholder-slate-400 transition" />
+        <p id="modal-error-msg" class="text-red-500 text-sm hidden">Please enter a valid email address.</p>
+        <button type="submit" class="cta-btn font-semibold text-base px-6 py-3.5 rounded-xl">
+          Join Waitlist
+        </button>
+      </form>
+      <div id="modal-success-msg" class="mt-4 bg-amber-50 text-amber-800 font-semibold rounded-xl px-5 py-3 border border-amber-200 hidden">
+        ✓ You're on the list! We'll be in touch soon.
+      </div>
+      <p class="text-xs text-slate-400 mt-4">⚠️ Enter the email address connected to your Amazon Alexa app.</p>
+    </div>
+  </div>
+
   <!-- ─── FOOTER ───────────────────────────────────────── -->
   <footer class="border-t border-slate-100 py-8 text-center text-sm text-slate-400">
     <div class="flex justify-center gap-6 mb-4 font-medium">
@@ -451,8 +469,46 @@
       });
     }
 
-    handleForm("signup-form",   "email-input",   "success-msg",   "error-msg");
     handleForm("signup-form-2", "email-input-2", "success-msg-2", null);
+
+    // ── Early Access Modal ────────────────────────────────────────────────────
+    const modal       = document.getElementById('early-access-modal');
+    const modalForm   = document.getElementById('modal-signup-form');
+    const modalInput  = document.getElementById('modal-email-input');
+    const modalError  = document.getElementById('modal-error-msg');
+    const modalSuccess = document.getElementById('modal-success-msg');
+
+    function openModal() {
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+      document.body.style.overflow = 'hidden';
+      setTimeout(() => modalInput.focus(), 50);
+    }
+    function closeModal() {
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+      document.body.style.overflow = '';
+    }
+
+    document.getElementById('nav-early-access-btn').addEventListener('click', openModal);
+    document.getElementById('hero-early-access-btn').addEventListener('click', openModal);
+    document.getElementById('modal-close-btn').addEventListener('click', closeModal);
+    document.getElementById('modal-backdrop').addEventListener('click', closeModal);
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+    modalForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      modalError.classList.add('hidden');
+      if (!modalInput.value || !modalInput.validity.valid) {
+        modalError.classList.remove('hidden');
+        return;
+      }
+      const btn = modalForm.querySelector('button[type=submit]');
+      btn.disabled = true;
+      btn.textContent = 'Joining…';
+      await submitEmail(modalInput.value, 'modal-success-msg');
+      modalForm.style.display = 'none';
+    });
 
     // ── Demo widget ───────────────────────────────────────────────────────────
     (function () {
@@ -480,7 +536,7 @@
         }
       }
 
-      const demoSection = document.getElementById('demo-section');
+      const demoSection = document.getElementById('playground');
       if ('IntersectionObserver' in window) {
         new IntersectionObserver((entries, obs) => {
           if (entries[0].isIntersecting) { loadSeed(); obs.disconnect(); }
