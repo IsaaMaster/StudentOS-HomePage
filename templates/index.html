@@ -104,6 +104,48 @@
     .delay-1 { animation-delay: .15s }
     .delay-2 { animation-delay: .3s }
     .delay-3 { animation-delay: .45s }
+
+    /* ── Demo widget ─────────────────────────────────────── */
+
+    /* Hide a panel on mobile only (JS toggles this class) */
+    @media (max-width: 1023px) {
+      .mobile-hidden { display: none !important; }
+    }
+
+    /* Mobile demo tab switcher */
+    .demo-tab { border-bottom: 2px solid transparent; transition: color .15s, border-color .15s; }
+    .demo-tab.active { color: var(--navy); border-bottom-color: var(--amber); }
+
+    /* Inbox/Drafts tab buttons inside the navy header */
+    .inbox-tab { border-bottom: 2px solid transparent; padding-bottom: 2px; transition: border-color .15s; }
+    .inbox-tab.active { border-bottom-color: var(--amber); }
+
+    /* Chat bubbles */
+    .chat-bubble-user  { background: var(--navy); color: #fff; border-radius: 16px 16px 4px 16px; }
+    .chat-bubble-alexa { background: #f8f9fb; color: var(--navy); border-radius: 16px 16px 16px 4px; border: 1.5px solid #e8eaf0; }
+
+    /* Suggestion chips */
+    .chip {
+      background: #f0f2f8; color: var(--navy);
+      font-size: .75rem; font-weight: 600;
+      padding: 4px 10px; border-radius: 999px;
+      cursor: pointer; white-space: nowrap;
+      transition: background .15s;
+    }
+    .chip:hover { background: #e2e6f0; }
+    .chip:disabled { opacity: .45; cursor: default; }
+
+    /* Email rows */
+    .email-row { cursor: pointer; transition: background .15s; }
+    .email-row:hover { background: #f8f9fb; }
+
+    /* Draft flash — highlights new draft row briefly */
+    @keyframes draft-flash { 0%,100%{background:#fff} 50%{background:#fef3c7} }
+    .draft-new { animation: draft-flash 1.2s ease; }
+
+    /* Badge pop-in */
+    @keyframes badge-pop { 0%{transform:scale(0)} 60%{transform:scale(1.25)} 100%{transform:scale(1)} }
+    .badge-pop { animation: badge-pop .3s ease forwards; }
   </style>
 </head>
 <body class="antialiased">
@@ -247,6 +289,96 @@
     </div>
   </section>
 
+  <!-- ─── DEMO ────────────────────────────────────────── -->
+  <section id="demo-section" class="max-w-5xl mx-auto px-6 py-20">
+    <h2 class="text-3xl font-extrabold text-center mb-3 text-[#1a2744]">See it in action.</h2>
+    <p class="text-center text-slate-500 mb-10 text-lg">Type a command like you'd say to Alexa. Watch your inbox update in real time.</p>
+
+    <!-- Mobile tab switcher (hidden on desktop) -->
+    <div class="flex lg:hidden border-b border-slate-200 rounded-t-2xl overflow-hidden">
+      <button id="tab-chat-btn" class="demo-tab active flex-1 py-2.5 text-sm font-semibold bg-white">💬 Chat</button>
+      <button id="tab-inbox-btn" class="demo-tab flex-1 py-2.5 text-sm font-semibold bg-white text-slate-400">📬 Inbox</button>
+    </div>
+
+    <!-- Split panel -->
+    <div class="grid grid-cols-1 lg:grid-cols-5 border border-slate-200 rounded-b-2xl lg:rounded-2xl overflow-hidden shadow-sm lg:h-[520px]">
+
+      <!-- ── Chat panel (left, 2/5) ── -->
+      <div id="panel-chat" class="lg:col-span-2 flex flex-col overflow-hidden h-[480px] lg:h-full border-b lg:border-b-0 lg:border-r border-slate-200">
+
+        <div class="bg-[#1a2744] px-4 py-3 flex items-center gap-2.5 flex-shrink-0">
+          <div class="mic-ring w-8 h-8 rounded-full bg-[#f59e0b] flex items-center justify-center flex-shrink-0">
+            <svg class="w-4 h-4 text-[#1a2744]" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M12 14a3 3 0 0 0 3-3V5a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3zm5-3a5 5 0 0 1-10 0H5a7 7 0 0 0 6 6.93V20H9v2h6v-2h-2v-2.07A7 7 0 0 0 19 11h-2z"/>
+            </svg>
+          </div>
+          <div>
+            <p class="text-white font-semibold text-sm leading-tight">Alexa · MailBrief</p>
+            <p class="text-slate-400 text-xs">Demo mode</p>
+          </div>
+          <div class="ml-auto flex items-center gap-1.5">
+            <div class="w-1.5 h-1.5 rounded-full bg-green-400"></div>
+            <span class="text-xs text-slate-400">Live</span>
+          </div>
+        </div>
+
+        <div id="chat-messages" class="flex-1 min-h-0 overflow-y-auto p-4 space-y-3 bg-white">
+          <div class="flex items-end gap-2">
+            <div class="chat-bubble-alexa text-sm px-3 py-2" style="max-width:85%">
+              Hi! I'm your MailBrief demo. Try asking me to summarize your emails, draft a message, or look up a verification code.
+            </div>
+          </div>
+        </div>
+
+        <div class="px-3 pt-2 pb-1.5 flex flex-wrap gap-1.5 bg-white border-t border-slate-100 flex-shrink-0">
+          <button class="chip" data-cmd="Summarize my emails">Summarize inbox</button>
+          <button class="chip" data-cmd="Draft an email to Professor Chen saying I'll submit Problem Set 3 late">Draft to Prof. Chen</button>
+          <button class="chip" data-cmd="Reply to Connor saying I'll be there at 7">Reply to Connor</button>
+          <button class="chip" data-cmd="What's my verification code?">Get code</button>
+          <button class="chip" data-cmd="Any emails from Amazon?">Check Amazon</button>
+        </div>
+
+        <div class="p-3 bg-white border-t border-slate-200 flex-shrink-0">
+          <form id="chat-form" class="flex gap-2">
+            <input id="chat-input" type="text" placeholder="Ask Alexa…" autocomplete="off"
+              class="email-input flex-1 border border-slate-200 rounded-xl px-3 py-2.5 text-sm" />
+            <button id="chat-send-btn" type="submit" class="cta-btn px-4 py-2.5 rounded-xl text-sm font-semibold flex-shrink-0">Send</button>
+          </form>
+        </div>
+      </div>
+
+      <!-- ── Inbox panel (right, 3/5) ── -->
+      <div id="panel-inbox" class="mobile-hidden lg:col-span-3 flex flex-col overflow-hidden h-[480px] lg:h-full bg-white">
+
+        <div class="bg-[#1a2744] px-4 py-3 flex items-center gap-4 flex-shrink-0">
+          <button id="inbox-tab-btn" class="inbox-tab active text-white text-sm font-semibold">
+            Inbox <span id="inbox-badge" class="ml-1 bg-[#f59e0b] text-[#1a2744] text-xs font-bold px-1.5 py-0.5 rounded-full">7</span>
+          </button>
+          <button id="drafts-tab-btn" class="inbox-tab text-slate-400 text-sm font-semibold">
+            Drafts <span id="drafts-badge" class="ml-1 bg-[#f59e0b] text-[#1a2744] text-xs font-bold px-1.5 py-0.5 rounded-full hidden">0</span>
+          </button>
+        </div>
+
+        <div id="email-list" class="flex-1 min-h-0 overflow-y-auto divide-y divide-slate-100">
+          <div class="flex justify-center items-center h-full gap-1.5 py-16">
+            <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+          </div>
+        </div>
+
+        <div id="email-detail" class="flex-col flex-1 overflow-hidden" style="display:none">
+          <div class="px-4 py-2.5 border-b border-slate-100 flex-shrink-0">
+            <button id="back-btn" class="text-sm font-semibold text-[#1a2744] hover:text-[#f59e0b] transition-colors">
+              ← Back
+            </button>
+          </div>
+          <div id="email-detail-content" class="flex-1 min-h-0 overflow-y-auto p-4"></div>
+        </div>
+      </div>
+
+    </div>
+    <p class="text-center text-xs text-slate-400 mt-4">✦ Demo uses simulated emails — no real Gmail data is accessed.</p>
+  </section>
+
   <!-- ─── BOTTOM CTA ──────────────────────────────────── -->
   <section class="max-w-2xl mx-auto px-6 py-24 text-center">
     <div class="flex justify-center gap-2 mb-6">
@@ -321,6 +453,250 @@
 
     handleForm("signup-form",   "email-input",   "success-msg",   "error-msg");
     handleForm("signup-form-2", "email-input-2", "success-msg-2", null);
+
+    // ── Demo widget ───────────────────────────────────────────────────────────
+    (function () {
+      const SKILL_URL = {{ skill_backend_url | tojson }};
+
+      let inboxEmails = [], drafts = [];
+      let activeInboxTab = 'inbox';
+      let openEmail = null;
+      let isLoading = false;
+      let seedLoaded = false;
+
+      // ── Seed loading ────────────────────────────────────────────────────────
+      async function loadSeed() {
+        if (seedLoaded) return;
+        seedLoaded = true;
+        try {
+          const res = await fetch(SKILL_URL + '/demo/seed');
+          if (!res.ok) throw new Error(res.status);
+          const data = await res.json();
+          inboxEmails = data.emails;
+          renderEmailList();
+        } catch {
+          document.getElementById('email-list').innerHTML =
+            '<p class="text-center text-slate-400 text-sm py-16">Could not load demo inbox.</p>';
+        }
+      }
+
+      const demoSection = document.getElementById('demo-section');
+      if ('IntersectionObserver' in window) {
+        new IntersectionObserver((entries, obs) => {
+          if (entries[0].isIntersecting) { loadSeed(); obs.disconnect(); }
+        }, { threshold: 0.1 }).observe(demoSection);
+      } else { loadSeed(); }
+
+      // ── Helpers ─────────────────────────────────────────────────────────────
+      function esc(s) {
+        return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+      }
+      function senderName(from) {
+        const m = from.match(/^(.+?)\s*</);
+        return m ? m[1].trim() : from;
+      }
+      function senderInitial(from) { return senderName(from).charAt(0).toUpperCase(); }
+      function formatDate(dateStr) {
+        try {
+          const d = new Date(dateStr);
+          const diffMs = Date.now() - d;
+          const diffMins  = Math.floor(diffMs / 60000);
+          const diffHours = Math.floor(diffMs / 3600000);
+          const diffDays  = Math.floor(diffMs / 86400000);
+          if (diffMins < 1)   return 'just now';
+          if (diffMins < 60)  return `${diffMins}m ago`;
+          if (diffHours < 24) return `${diffHours}h ago`;
+          if (diffDays === 1) return 'Yesterday';
+          return `${diffDays}d ago`;
+        } catch { return ''; }
+      }
+
+      // ── Render email list ────────────────────────────────────────────────────
+      function renderEmailList() {
+        const list = document.getElementById('email-list');
+        const items = activeInboxTab === 'inbox' ? inboxEmails : drafts;
+        if (items.length === 0) {
+          list.innerHTML = `<p class="text-center text-slate-400 text-sm py-16">No ${activeInboxTab} yet.</p>`;
+          return;
+        }
+        list.innerHTML = items.map((email, i) => `
+          <div class="email-row flex gap-3 items-start px-4 py-3 ${email._new ? 'draft-new' : ''}" data-idx="${i}">
+            <div class="w-8 h-8 rounded-full bg-[#f0f2f8] flex items-center justify-center flex-shrink-0 mt-0.5 text-xs font-bold text-[#1a2744]">
+              ${esc(activeInboxTab === 'drafts' ? (email.to||'?').charAt(0).toUpperCase() : senderInitial(email.from))}
+            </div>
+            <div class="flex-1 min-w-0">
+              <div class="flex justify-between items-baseline gap-2">
+                <span class="font-semibold text-[#1a2744] text-sm truncate">
+                  ${esc(activeInboxTab === 'drafts' ? 'To: ' + (email.to||'') : senderName(email.from))}
+                </span>
+                <span class="text-xs text-slate-400 flex-shrink-0">
+                  ${activeInboxTab === 'drafts' ? esc(email.timestamp||'just now') : formatDate(email.date)}
+                </span>
+              </div>
+              <p class="text-sm font-medium text-[#1a2744] truncate">${esc(email.subject)}</p>
+              <p class="text-xs text-slate-400 truncate">${esc(email.snippet||'')}</p>
+            </div>
+          </div>`).join('');
+
+        items.forEach(e => delete e._new);
+        list.querySelectorAll('.email-row').forEach(row => {
+          row.addEventListener('click', () => {
+            openEmail = items[parseInt(row.dataset.idx)];
+            openEmail._isDraft = activeInboxTab === 'drafts';
+            showDetail();
+          });
+        });
+      }
+
+      // ── Detail view ──────────────────────────────────────────────────────────
+      function showDetail() {
+        document.getElementById('email-list').style.display = 'none';
+        const detail = document.getElementById('email-detail');
+        detail.style.display = 'flex';
+        const isDraft = openEmail._isDraft;
+        document.getElementById('email-detail-content').innerHTML = `
+          <h3 class="font-bold text-[#1a2744] text-base mb-3">${esc(openEmail.subject)}</h3>
+          <div class="text-sm text-slate-500 mb-1">
+            <span class="font-medium text-[#1a2744]">${isDraft ? 'To' : 'From'}:</span>
+            ${esc(isDraft ? (openEmail.to||'') : senderName(openEmail.from))}
+          </div>
+          <div class="text-xs text-slate-400 mb-4 pb-3 border-b border-slate-100">
+            ${isDraft ? esc(openEmail.timestamp||'just now') : formatDate(openEmail.date)}
+          </div>
+          <div class="text-sm text-slate-700 whitespace-pre-wrap leading-relaxed">${esc(openEmail.body)}</div>`;
+      }
+
+      document.getElementById('back-btn').addEventListener('click', () => {
+        openEmail = null;
+        document.getElementById('email-list').style.display = '';
+        document.getElementById('email-detail').style.display = 'none';
+      });
+
+      // ── Inbox / Drafts tabs ──────────────────────────────────────────────────
+      function switchInboxTab(tab) {
+        if (activeInboxTab === tab) return;
+        activeInboxTab = tab;
+        openEmail = null;
+        document.getElementById('email-list').style.display = '';
+        document.getElementById('email-detail').style.display = 'none';
+        document.getElementById('inbox-tab-btn').classList.toggle('active', tab === 'inbox');
+        document.getElementById('inbox-tab-btn').classList.toggle('text-white', tab === 'inbox');
+        document.getElementById('inbox-tab-btn').classList.toggle('text-slate-400', tab !== 'inbox');
+        document.getElementById('drafts-tab-btn').classList.toggle('active', tab === 'drafts');
+        document.getElementById('drafts-tab-btn').classList.toggle('text-white', tab === 'drafts');
+        document.getElementById('drafts-tab-btn').classList.toggle('text-slate-400', tab !== 'drafts');
+        renderEmailList();
+      }
+      document.getElementById('inbox-tab-btn').addEventListener('click', () => switchInboxTab('inbox'));
+      document.getElementById('drafts-tab-btn').addEventListener('click', () => switchInboxTab('drafts'));
+
+      // ── Mobile panel tabs ────────────────────────────────────────────────────
+      const tabChatBtn  = document.getElementById('tab-chat-btn');
+      const tabInboxBtn = document.getElementById('tab-inbox-btn');
+      if (tabChatBtn) {
+        tabChatBtn.addEventListener('click', () => {
+          document.getElementById('panel-chat').classList.remove('mobile-hidden');
+          document.getElementById('panel-inbox').classList.add('mobile-hidden');
+          tabChatBtn.classList.add('active');    tabChatBtn.classList.remove('text-slate-400');
+          tabInboxBtn.classList.remove('active'); tabInboxBtn.classList.add('text-slate-400');
+        });
+        tabInboxBtn.addEventListener('click', () => {
+          document.getElementById('panel-inbox').classList.remove('mobile-hidden');
+          document.getElementById('panel-chat').classList.add('mobile-hidden');
+          tabInboxBtn.classList.add('active');    tabInboxBtn.classList.remove('text-slate-400');
+          tabChatBtn.classList.remove('active'); tabChatBtn.classList.add('text-slate-400');
+        });
+      }
+
+      // ── Chat ─────────────────────────────────────────────────────────────────
+      const chatMessages = document.getElementById('chat-messages');
+
+      function appendBubble(text, role) {
+        const div = document.createElement('div');
+        div.className = 'flex ' + (role === 'user' ? 'justify-end' : 'items-end gap-2');
+        div.innerHTML = role === 'user'
+          ? `<div class="chat-bubble-user text-sm px-3 py-2" style="max-width:85%">${esc(text)}</div>`
+          : `<div class="chat-bubble-alexa text-sm px-3 py-2" style="max-width:85%">${esc(text)}</div>`;
+        chatMessages.appendChild(div);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+      }
+
+      function showTyping() {
+        const div = document.createElement('div');
+        div.id = 'typing-indicator';
+        div.className = 'flex items-end gap-2';
+        div.innerHTML = `<div class="chat-bubble-alexa px-3 py-3 flex gap-1">
+          <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+        </div>`;
+        chatMessages.appendChild(div);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+      }
+      function hideTyping() { document.getElementById('typing-indicator')?.remove(); }
+
+      function applyMutation(mutation) {
+        if (!mutation || mutation.type !== 'draft_created') return;
+        drafts.unshift({ ...mutation.draft, _new: true });
+
+        const badge = document.getElementById('drafts-badge');
+        badge.textContent = drafts.length;
+        badge.classList.remove('hidden', 'badge-pop');
+        void badge.offsetWidth;
+        badge.classList.add('badge-pop');
+
+        switchInboxTab('drafts');
+      }
+
+      async function sendCommand(command) {
+        if (isLoading || !command.trim()) return;
+        isLoading = true;
+        const sendBtn = document.getElementById('chat-send-btn');
+        const input   = document.getElementById('chat-input');
+        sendBtn.disabled = true; input.disabled = true; input.value = '';
+        document.querySelectorAll('.chip').forEach(c => c.disabled = true);
+
+        appendBubble(command, 'user');
+        showTyping();
+
+        // On mobile, switch to inbox panel so user sees real-time update
+        if (window.innerWidth < 1024 && tabInboxBtn) tabInboxBtn.click();
+
+        try {
+          const res = await fetch(SKILL_URL + '/demo/chat', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({command}),
+          });
+          if (!res.ok) throw new Error(res.status);
+          const data = await res.json();
+          hideTyping();
+
+          // On mobile, switch back to chat to show the Alexa response
+          if (window.innerWidth < 1024 && tabChatBtn) tabChatBtn.click();
+
+          appendBubble(data.response, 'alexa');
+          if (data.mutation) applyMutation(data.mutation);
+        } catch {
+          hideTyping();
+          if (window.innerWidth < 1024 && tabChatBtn) tabChatBtn.click();
+          appendBubble("Sorry, I couldn't reach the server. Please try again.", 'alexa');
+        }
+
+        isLoading = false;
+        sendBtn.disabled = false; input.disabled = false;
+        document.querySelectorAll('.chip').forEach(c => c.disabled = false);
+        input.focus();
+      }
+
+      document.getElementById('chat-form').addEventListener('submit', e => {
+        e.preventDefault();
+        const val = document.getElementById('chat-input').value.trim();
+        if (val) sendCommand(val);
+      });
+
+      document.querySelectorAll('.chip').forEach(chip => {
+        chip.addEventListener('click', () => { if (!isLoading) sendCommand(chip.dataset.cmd); });
+      });
+    })();
   </script>
 </body>
 </html>

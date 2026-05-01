@@ -14,6 +14,7 @@ templates = Jinja2Templates(directory="templates")
 resend.api_key = os.getenv("RESEND_API_KEY")
 NOTIFY_EMAIL = os.getenv("NOTIFY_EMAIL")
 FROM_EMAIL = os.getenv("FROM_EMAIL", "onboarding@resend.dev")
+SKILL_BACKEND_URL = os.getenv("SKILL_BACKEND_URL", "http://localhost:8000").rstrip("/")
 
 def send_notification(user_email: str):
     if not resend.api_key or not NOTIFY_EMAIL:
@@ -42,7 +43,7 @@ def send_notification(user_email: str):
 
 @app.get("/", response_class=HTMLResponse)
 async def index(request: Request):
-    return templates.TemplateResponse("index.html", {"request": request})
+    return templates.TemplateResponse("index.html", {"request": request, "skill_backend_url": SKILL_BACKEND_URL})
 
 
 SHARED_STYLES = """
